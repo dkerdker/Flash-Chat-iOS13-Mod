@@ -44,21 +44,15 @@ class ChatViewController: UIViewController {
         
         tableView.register(UINib(nibName: C.cellNibName, bundle: nil), forCellReuseIdentifier: C.cellIdentifier)
         
-        loadMessages()
+        if let addImageButtonImage = UIImage(systemName: "photo") {
+            self.addRightAddImageButtonTo(textField: messageTextfield, with: addImageButtonImage)
+            print("got image")
+        }
         
+        loadMessages()
     }
     
-//    let gesture = UITapGestureRecognizer(target: self, action:  #selector(self.checkAction(sender:)))
-//    self.tableView.addGestureRecognizer(gesture)
-//    self.tableView.removeGestureRecognizer(gesture)
-
-//    @objc func checkAction(sender : UITapGestureRecognizer) {
-//        if let indexPath = self.tableView.indexPathForSelectedRow{
-//            self.tableView.deselectRow(at: indexPath, animated: true)
-//        }
-//    }
-    
- //MARK: - Sending to Firebase Storage
+    //MARK: - Sending to Firebase Storage
     @IBAction func sendPressed(_ sender: UIButton) {
         
         if let messageBody = messageTextfield.text,
@@ -233,20 +227,5 @@ extension ChatViewController: UITableViewDelegate {
                 
                 self.present(alert, animated: true)
             }
-            
-           // lastClick = now
-           // lastIndexPath = indexPath
-        //}
     }
 }
-
-
-//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: tableView, action: #selector(self.deselectMessage(_:)))
-//
-//        view.addGestureRecognizer(tap)
-
-//    @objc func deselectMessage(_ sender: UITapGestureRecognizer) {
-//        if let indexPath = self.tableView.indexPathForSelectedRow{
-//            tableView.deselectRow(at: indexPath, animated: false)
-//        }
-//    }
