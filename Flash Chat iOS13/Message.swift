@@ -11,4 +11,5 @@ import Foundation
 struct Message {
     let sender: String //the email
     let body: String
+    let image: String
 }

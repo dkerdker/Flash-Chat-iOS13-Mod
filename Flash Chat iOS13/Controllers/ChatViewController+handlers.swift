@@ -53,7 +53,6 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             }
             
             let imageView = UIImageView(image: selectedImage)
-            //imageView.frame = CGRect(x: 0, y: 0, width: 340, height: 340)
             imageView.layer.cornerRadius = 8.0
             imageView.clipsToBounds = true
             
@@ -68,11 +67,14 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             //Create Buttons
             createImageSendButtons(sendImageConfirmViewController, title: "Send", selector: #selector(sendImageAsChat), primaryButton: true)
             createImageSendButtons(sendImageConfirmViewController, title: "Cancel", selector: #selector(cancelSendImage), primaryButton: false)
+            
+            selectedImageToUse = selectedImage
         }
         
         dismiss(animated: true, completion: nil)
     }
     
+    //Function to create Buttons
     func createImageSendButtons(_ sendImageConfirmViewController: UIViewController, title: String, selector: Selector, primaryButton: Bool){
         let sendButton = UIButton()
         let weight: UIFont.Weight = primaryButton ? .bold : .regular
@@ -103,14 +105,25 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             ])
     }
     
-    
+    //Button Functions
     @objc func sendImageAsChat() {
-        print("send the image as chat, and up to database")
-        //code
+        sendMessageWithImage(with: selectedImageToUse)
+        
+
+        
+//        if let selectedImage = selectedImageToUse {
+//            var testIP = IndexPath()
+//            testIP.append([0,20])
+//            let testImageInCell = tableView.cellForRow(at: testIP) as! MessageCell
+//
+//            expandMessageBubbleToFit(testImageInCell, image: selectedImage)
+//            selectedImageToUse = nil
+//        }
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func cancelSendImage() {
-        print("cancel image")
         dismiss(animated: true, completion: nil)
     }
+    
 }

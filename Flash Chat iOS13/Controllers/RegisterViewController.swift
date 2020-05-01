@@ -13,9 +13,19 @@ class RegisterViewController: UIViewController {
 
     @IBOutlet weak var emailTextfield: UITextField!
     @IBOutlet weak var passwordTextfield: UITextField!
+    @IBOutlet weak var registerImageView: UIImageView!
+    
+    let db = Firestore.firestore()
+    let storage = Storage.storage()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        registerImageView.layer.borderWidth = 3.0
+        registerImageView.layer.masksToBounds = false
+        registerImageView.layer.borderColor = UIColor.white.cgColor
+        registerImageView.layer.cornerRadius = registerImageView.frame.size.height/2
+        registerImageView.clipsToBounds = true
         
         navigationController?.navigationBar.barTintColor = UIColor(named: C.BrandColors.blue)
         title = C.appName
@@ -38,6 +48,18 @@ class RegisterViewController: UIViewController {
                     self.present(alert, animated: true)
                     
                 } else {
+                    self.db.collection(C.FStore.userCollectionName).addDocument(data: [ //package the stuff to send to DB
+                        C.FStore.userEmail: email,
+                        C.FStore.imageRegister: "",
+                        //C.FStore.dateField: Date().timeIntervalSince1970,
+                    ]) { (error) in
+                        if let e = error {
+                            print("There was an issue saving registration data to firestore, \(e)")
+                            return
+                        } else {
+                            print("Successfully saved registration data")
+                        }
+                    }
                     //Navigate to the ChatViewController
                     self.performSegue(withIdentifier: C.registerSegue, sender: self)
                 }

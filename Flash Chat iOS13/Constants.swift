@@ -24,9 +24,14 @@ struct C {
     }
     
     struct FStore {
+        static let userCollectionName = "users"
+        static let userEmail = "userEmail"
+        static let imageRegister = "image"
+        
         static let collectionName = "messages"
         static let senderField = "sender"
         static let bodyField = "body"
         static let dateField = "date"
+        static let imageURL = "imageURL"
     }
 }
