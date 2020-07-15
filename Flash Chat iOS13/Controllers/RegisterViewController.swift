@@ -16,7 +16,9 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var registerImageView: UIImageView!
     
     let db = Firestore.firestore()
-    let storage = Storage.storage()
+    //let storage = Storage.storage()
+    
+    var selectedImageToUse: UIImage? = nil
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -33,6 +35,8 @@ class RegisterViewController: UIViewController {
             NSAttributedString.Key.foregroundColor: UIColor.white,
             NSAttributedString.Key.font: UIFont(name: C.appTitleFont, size: 25)!
         ]
+        
+        registerImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImage)))
     }
     
     @IBAction func registerPressed(_ sender: UIButton) {
@@ -50,8 +54,7 @@ class RegisterViewController: UIViewController {
                 } else {
                     self.db.collection(C.FStore.userCollectionName).addDocument(data: [ //package the stuff to send to DB
                         C.FStore.userEmail: email,
-                        C.FStore.imageRegister: "",
-                        //C.FStore.dateField: Date().timeIntervalSince1970,
+                        C.FStore.imageRegister: "", //holds ntg now
                     ]) { (error) in
                         if let e = error {
                             print("There was an issue saving registration data to firestore, \(e)")

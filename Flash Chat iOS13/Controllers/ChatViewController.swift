@@ -16,7 +16,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var appTitle: UINavigationItem!
     
     let db = Firestore.firestore()
-    let storage = Storage.storage()
     
     var selectedIndexPath: IndexPath? = nil
     
@@ -46,10 +45,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate {
         
         tableView.register(UINib(nibName: C.cellNibName, bundle: nil), forCellReuseIdentifier: C.cellIdentifier)
         
-        if let addImageButtonImage = UIImage(systemName: "photo") {
-            self.addRightAddImageButtonTo(textField: messageTextfield, with: addImageButtonImage)
-        }
-        
         loadMessages()
     }
     
@@ -58,32 +53,32 @@ class ChatViewController: UIViewController, UITextFieldDelegate {
         sendMessage()
     }
     
-    func sendMessageWithImage(with image: UIImage? = nil) {
-        if let uploadData = image?.jpegData(compressionQuality: 0.75) {
-            let imageName = NSUUID().uuidString
-            let storageRef = storage.reference().child("\(imageName).png")
-            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
-                
-                guard metadata != nil else {
-                    print("Error saving image to storage, \(error!)")
-                    return
-                }
-                
-                storageRef.downloadURL { (url, error) in
-                    guard url != nil else {
-                        if let error = error {
-                            print("Error saving image to storage, \(error)")
-                        }
-                        return
-                    }
-                    if let imageURLString = url?.absoluteString {
-                        print("GOT UPLOADED, HERE IS THE IMAGEURL: \(imageURLString)")
-                        self.sendMessage(with: imageURLString)
-                    }
-                }
-            }
-        }
-    }
+//    func sendMessageWithImage(with image: UIImage? = nil) {
+//        if let uploadData = image?.jpegData(compressionQuality: 0.75) {
+//            let imageName = NSUUID().uuidString
+//            let storageRef = storage.reference().child("\(imageName).png")
+//            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+//
+//                guard metadata != nil else {
+//                    print("Error saving image to storage, \(error!)")
+//                    return
+//                }
+//
+//                storageRef.downloadURL { (url, error) in
+//                    guard url != nil else {
+//                        if let error = error {
+//                            print("Error saving image to storage, \(error)")
+//                        }
+//                        return
+//                    }
+//                    if let imageURLString = url?.absoluteString {
+//                        print("GOT UPLOADED, HERE IS THE IMAGEURL: \(imageURLString)")
+//                        self.sendMessage(with: imageURLString)
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func sendMessage(with imageURL: String? = nil) {
         if let messageBody = messageTextfield.text,
@@ -176,7 +171,7 @@ extension ChatViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages[indexPath.row]
-        let imageURL = message.image
+        //let imageURL = message.image
         
         let cell = tableView.dequeueReusableCell(withIdentifier: C.cellIdentifier, for: indexPath) as! MessageCell
         cell.label.text = message.body
@@ -185,24 +180,24 @@ extension ChatViewController: UITableViewDataSource {
 //            cell.cellMessageStack.bottomAnchor.constraint(equalTo: cell.cellMessageStack.superview!.bottomAnchor, constant: -10)
 //        ])
         
-        if imageURL != "N/A" {
-            
-            
-            let url = URL(string: imageURL)
-            URLSession(configuration: .default).dataTask(with: url!) { (data, response, error) in
-                if error != nil {
-                    print("downloading image hit an error, \(error!)")
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    let image = UIImage(data: data!)
-                    //cell.messageImage.image = image
-                }
-
-            }.resume()
-            
-        }
+//        if imageURL != "N/A" {
+//
+//
+//            let url = URL(string: imageURL)
+//            URLSession(configuration: .default).dataTask(with: url!) { (data, response, error) in
+//                if error != nil {
+//                    print("downloading image hit an error, \(error!)")
+//                    return
+//                }
+//
+//                DispatchQueue.main.async {
+//                    let image = UIImage(data: data!)
+//                    //cell.messageImage.image = image
+//                }
+//
+//            }.resume()
+//
+//        }
         
         //message from the current user.
         if message.sender == Auth.auth().currentUser?.email {

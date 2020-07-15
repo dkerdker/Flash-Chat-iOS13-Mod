@@ -1,5 +1,5 @@
 //
-//  users.swift
+//  Users.swift
 //  Flash Chat iOS13
 //
 //  Created by Dee Ker Khoo on 01/05/2020.

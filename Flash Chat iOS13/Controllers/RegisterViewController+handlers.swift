@@ -1,32 +1,13 @@
 import UIKit
-
-extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+ 
+extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    //Image Picker
-    @objc func addImageMessage() {
-        print("clicked on button to add image to message")
-        
+    @objc func handleSelectProfileImage() {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.allowsEditing = true
         
         present(picker, animated: true, completion: nil)
-        
-    }
-    
-    //Add Button
-    func addRightAddImageButtonTo(textField: UITextField, with image: UIImage) {
-        let rightAddImageButton = UIButton()
-        let boldConfig = UIImage.SymbolConfiguration(weight: .regular)
-        let systemImage = UIImage(systemName: "photo", withConfiguration: boldConfig)
-        rightAddImageButton.setImage(systemImage, for: .normal)
-        rightAddImageButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
-        rightAddImageButton.frame = CGRect(x: CGFloat(textField.frame.size.width - 25), y: CGFloat(5), width: CGFloat(25), height: CGFloat(25))
-        rightAddImageButton.tintColor = .lightGray
-        rightAddImageButton.addTarget(self, action: #selector(addImageMessage), for: .touchUpInside)
-        
-        textField.rightView = rightAddImageButton
-        textField.rightViewMode = .always
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -53,7 +34,7 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             }
             
             let imageView = UIImageView(image: selectedImage)
-            imageView.layer.cornerRadius = 8.0
+            imageView.layer.cornerRadius = imageView.frame.size.width/2
             imageView.clipsToBounds = true
             
             sendImageConfirmViewController.view.addSubview(imageView)
@@ -65,10 +46,10 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             imageView.centerYAnchor.constraint(lessThanOrEqualTo: imageView.superview!.centerYAnchor).isActive = true
             
             //Create Buttons
-            createImageSendButtons(sendImageConfirmViewController, title: "Send", selector: #selector(sendImageAsChat), primaryButton: true)
-            createImageSendButtons(sendImageConfirmViewController, title: "Cancel", selector: #selector(cancelSendImage), primaryButton: false)
-            
-            selectedImageToUse = selectedImage
+            createImageSendButtons(sendImageConfirmViewController, title: "Pick", selector: #selector(pickImage), primaryButton: true)
+            createImageSendButtons(sendImageConfirmViewController, title: "Cancel", selector: #selector(cancelImageSelect), primaryButton: false)
+        
+            self.selectedImageToUse = selectedImage
         }
         
         dismiss(animated: true, completion: nil)
@@ -106,24 +87,14 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
     
     //Button Functions
-    @objc func sendImageAsChat() {
-        sendMessageWithImage(with: selectedImageToUse)
-        
+    @objc func pickImage() {
+        //set profile image
+        registerImageView.image = selectedImageToUse
 
-        
-//        if let selectedImage = selectedImageToUse {
-//            var testIP = IndexPath()
-//            testIP.append([0,20])
-//            let testImageInCell = tableView.cellForRow(at: testIP) as! MessageCell
-//
-//            expandMessageBubbleToFit(testImageInCell, image: selectedImage)
-//            selectedImageToUse = nil
-//        }
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func cancelSendImage() {
+    @objc func cancelImageSelect() {
         dismiss(animated: true, completion: nil)
     }
-    
 }
